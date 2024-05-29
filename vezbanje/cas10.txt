@@ -1,0 +1,72 @@
+1.  Izdvojiti nazive ispitnih rokova.
+
+ispitnirok[naziv]
+
+2.  Izdvojiti podatke o studentima sa imenom Miloš.
+
+dosije where ime='Milos'
+
+3.  Izdvojiti nazive rokova koji su održani posle 2009. godine.
+
+(ispitnirok where skgodina>2009)[naziv]
+
+4.  Izdvojiti ime i prezime studenta i nazive predmeta koje je položio.
+
+((predmet join ispit where ocena>5)
+join dosije)[ime, prezime, naziv]
+
+5.  Pronaći nazive predmeta koji imaju po 6 bodova i koje je polagao student sa indeksom 21/2010.
+
+((ispit join predmet where espb=6)
+join dosije where indeks=20140021)[naziv]
+
+6.  Pronaći nazive predmeta koji imaju manje bodova od predmeta sa nazivom Geometrija.
+
+define alias p1 for predmet
+define alias p2 for predmet
+((p1 times p2)
+where p1.espb < p2.espb and p2.naziv='Geometrija')[p1.naziv]
+
+7.  Pronaći studente koji nemaju položen nijedan ispit.
+
+dosije[indeks]
+minus
+(ispit where ocena>5)[indeks]
+
+8.  Pronaći oznaku i naziv predmeta koji su položili svi studenti koji su fakultet upisali 06.07.2014.
+
+((predmet join ispit) where ocena>5
+join dosije
+where datupisa='06.07.2014')[oznaka, naziv]
+
+--(vrv netacno)
+
+9.  Pronaći indekse studenata koji su fakultet upisali 06.07.2014. ili imaju bar jednu ocenu 10.
+
+(dosije where datupisa='06.07.2014')[indeks]
+union
+(dosije join ispit where ocena=10)[indeks]
+
+10. Pronaći podatke o predmetima koje nije položio nijedan student sa prezimenom Markovic.
+
+(predmet join ispit where ocena>5)[naziv]
+minus
+(ispit join dosije where prezime='Markovic')[indeks]
+
+--(vrv netacno)
+
+11. Pronaći podatke o ispitnim rokovima u kojima je položen ispit iz predmeta Programiranje 1.
+
+((predmet join ispit) where ispit.ocena>5 and predmet.naziv = 'Programiranje 1'
+times ispitnirok)[ispitnirok.naziv]
+
+12. Izdvojiti podatke o studentima koji su polagali u ispitnom roku sa oznakom jan u šk. godini 2015.
+
+((dosije join ispit)
+join ispitnirok where oznakaroka='jan')
+
+13. Pronaći studente koji su položili neki predmet od 6 espb bodova. Izdvojiti indeks, ime, prezime i naziv predmeta.
+
+((dosije join ispit) where ocena>5
+join predmet where espb=6)[indeks, ime, prezime, naziv]
+
