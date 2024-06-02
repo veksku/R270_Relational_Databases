@@ -35,11 +35,13 @@ minus
 
 8.  Pronaći oznaku i naziv predmeta koji su položili svi studenti koji su fakultet upisali 06.07.2014.
 
-((predmet join ispit) where ocena>5
+((predmet join ispit)
 join dosije
-where datupisa='06.07.2014')[oznaka, naziv]
-
---(vrv netacno)
+where datupisa='06.07.2014')[naziv, oznaka]
+minus
+((predmet join ispit) where ocena < 6
+join dosije
+where datupisa='06.07.2014')[naziv, oznaka]
 
 9.  Pronaći indekse studenata koji su fakultet upisali 06.07.2014. ili imaju bar jednu ocenu 10.
 
