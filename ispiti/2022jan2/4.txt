@@ -1,0 +1,35 @@
+--Relaciona algebra
+
+((((ispitnirok times predmet) where predmet.espb=6)
+join ispit where ocena>=5)
+join dosije where mestorodjenja='Beograd')[ispitnirok.naziv]
+
+
+--Relacioni racun
+
+ideja 1)
+
+range of irx is ispitnirok
+range of dx is dosije
+range of ix is ispit
+range of px is predmet
+
+irx.naziv
+where not exists ix (ix.oznakaroka = irx.oznakaroka and ix.ocena>=5
+	and not exists px (px.idpredmeta = ix.idpredmeta and px.espb=6)
+	and not exists dx (dx.indeks = ix.indeks and dx.mestorodjenja='Beograd'))
+	
+ideja 2)	
+
+range of irx is ispitnirok
+range of dx is dosije
+range of ix is ispit
+range of px is predmet
+
+irx.naziv
+where forall px (
+	px.espb=6 and exists ix (
+		ix.oznakaroka=irx.oznakaroka and ix.ocena >=5 and exists dx (
+			dx.indeks=ix.indeks and dx.mestorodjenja='Beograd')))
+			
+-sva 3 daju razlicita resenja

@@ -1,0 +1,20 @@
+--Relaciona algebra
+
+(predmet where espb=6)[oznaka, naziv]
+union
+(predmet join ispit where ocena>5 and oznakaroka='feb')[naziv, oznaka]
+
+--trebalo bi
+--((predmet join ispit) join ispitnirok where naziv='Februar 2015')[oznaka, naziv]
+--ali mislim da dolazi do konflikta jer i predmet i ispitnirok imaju kolonu naziv
+
+--Relacioni racun
+
+range of px is predmet
+range of ix is ispit
+range of dx is dosije
+range of irx is ispitnirok
+
+px.oznaka, px.naziv
+where px.espb = 6 or exists ix (ix.idpredmeta = px.idpredmeta and ix.ocena > 5
+	and exists irx (ix.oznakaroka = irx.oznakaroka and irx.naziv='Februar 2015'))

@@ -1,0 +1,22 @@
+--Relaciona algebra
+
+define alias i1 for ispit
+define alias i2 for ispit
+
+(((dosije join i1 where ocena > 5) join ispitnirok) join i2 where ocena=10)[ime,prezime]
+
+--Relacioni racun
+
+range of dx is dosije
+range of ix is ispit
+range of iy is ispit
+range of irx is ispitnirok
+
+dx.ime, dx.prezime
+where forall irx (
+	exists ix (ix.oznakaroka=irx.oznakaroka and ix.ocena=10)
+	and exists iy (iy.oznakaroka=irx.oznakaroka and iy.indeks=dx.indeks and iy.ocena>5)
+)
+
+
+-ne daju isto resenje pa nesto ne valja, vrv algebra

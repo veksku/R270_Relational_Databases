@@ -1,0 +1,15 @@
+--Relaciona algebra
+
+define alias d1 for dosije
+define alias d2 for dosije
+
+(d1 times d2) where d1.mestorodjenja=d2.mestorodjenja and d1.indeks<>d2.indeks
+and d1.indeks<>20130023 and d2.indeks=20130023[d1.ime, d1.prezime]
+
+--Relacioni racun
+
+range of dx is dosije
+range of dy is dosije
+
+dx.ime, dx.prezime
+where exists dy (dy.indeks=20130023 and dx.mestorodjenja=dy.mestorodjenja and dx.indeks<>dy.indeks)
