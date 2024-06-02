@@ -51,11 +51,9 @@ union
 
 10. Pronaći podatke o predmetima koje nije položio nijedan student sa prezimenom Markovic.
 
-(predmet join ispit where ocena>5)[naziv]
+(predmet join ispit where ocena > 5)[naziv]
 minus
-(ispit join dosije where prezime='Markovic')[indeks]
-
---(vrv netacno)
+((predmet join ispit where ocena > 5) join dosije where prezime='Markovic' )[naziv]
 
 11. Pronaći podatke o ispitnim rokovima u kojima je položen ispit iz predmeta Programiranje 1.
 
