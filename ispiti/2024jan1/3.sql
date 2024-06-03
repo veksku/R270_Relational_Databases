@@ -23,7 +23,7 @@ return
 --#SET TERMINATOR @
 
 create trigger azuriranje_unosa
-before insert on stats
+before insert on stats --before/after insert/update/delete
 referencing new as n
 for each row
 begin atomic
