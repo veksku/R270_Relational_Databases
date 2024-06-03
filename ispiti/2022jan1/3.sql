@@ -30,7 +30,7 @@ end@
 select *
 from da.dosije
 where datdiplomiranja is null@
---nadjen primer 201501099
+--nadjen primer 20150109
 
 update da.dosije
 set datdiplomiranja = current date
