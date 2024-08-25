@@ -2,11 +2,7 @@
 
 (predmet where espb=6)[oznaka, naziv]
 union
-(predmet join ispit where ocena>5 and oznakaroka='feb')[naziv, oznaka]
-
---trebalo bi
---((predmet join ispit) join ispitnirok where naziv='Februar 2015')[oznaka, naziv]
---ali mislim da dolazi do konflikta jer i predmet i ispitnirok imaju kolonu naziv
+(predmet join ispit where ocena>5 and oznakaroka='feb' and skgodina=2015)[naziv, oznaka]
 
 --Relacioni racun
 
