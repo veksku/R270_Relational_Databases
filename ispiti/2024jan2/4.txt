@@ -10,4 +10,4 @@ range of px is predmet
 range of ix is ispit
 px.oznaka, px.naziv
 where px.espb = 6 or exists ix (ix.idpredmeta = px.idpredmeta and ix.ocena > 5
-	and ix.oznakaroka = 2015 and ix.skgodina=2015))
+	and ix.oznakaroka = 'feb' and ix.skgodina=2015))
