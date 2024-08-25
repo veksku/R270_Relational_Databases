@@ -12,4 +12,4 @@ range of dx is dosije
 range of dy is dosije
 
 dx.ime, dx.prezime
-where exists dy (dy.indeks=20130023 and dx.mestorodjenja=dy.mestorodjenja and dx.indeks<>dy.indeks)
+where dy.indeks=20130023 and dx.mestorodjenja=dy.mestorodjenja and dx.indeks<>dy.indeks
