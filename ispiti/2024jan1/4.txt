@@ -4,7 +4,7 @@ define alias d1 for dosije
 define alias d2 for dosije
 
 (d1 times d2) where d1.mestorodjenja=d2.mestorodjenja and d1.indeks<>d2.indeks
-and d1.indeks<>20130023 and d2.indeks=20130023[d1.ime, d1.prezime]
+and d1.indeks<>20130023 and d2.indeks=20130023 --[d1.ime, d1.prezime] prijavljuje gresku
 
 --Relacioni racun
 
