@@ -1,50 +1,48 @@
 --a
 
-create table stats (
+create table stats(
 	mesto varchar(30) not null primary key,
 	broj_studenata integer,
 	broj_diplomiranih integer,
-	udeo_studenata float default 0.0
+	udeo_studenata double default 0.0
 );
-
 
 --b
 
 create function izracunaj_udeo(mesto varchar(30))
-returns float
+returns double
 return
 	select decimal((count(case when d.mestorodjenja = mesto then 1 else null end) + 0.0)
-		/  (count(*)+0.0), 5, 2)
+		/ (count(*)+0.0), 5, 2)
 	from da.dosije d;
-
 
 --c
 
 --#SET TERMINATOR @
-
 create trigger azuriranje_unosa
-before insert on stats --before/after insert/update/delete
+before insert on stats
 referencing new as n
 for each row
 begin atomic
 	set n.udeo_studenata = izracunaj_udeo(n.mesto);
 end@
-
+--#SET TERMINATOR ;
 
 --d
 
-insert into stats
+insert into stats(mesto, broj_studenata, broj_diplomiranih)
 select d.mestorodjenja, count(*),
-	count(case when d.datdiplomiranja is not null then 1 else null end), 0
+	count(case when d.datdiplomiranja is not null then 1 else null end)
 from da.dosije d
 where d.mestorodjenja like 'B%'
-group by d.mestorodjenja@
-
-select *
-from stats
+group by d.mestorodjenja;
 
 --e
 
-drop table stats@
-drop trigger azuriranje_unosa@
-drop function izracunaj_udeo@
+drop table stats;
+drop function izracunaj_udeo;
+drop trigger azuriranje_unosa;
+
+--pomocni upit
+select *
+from stats;
