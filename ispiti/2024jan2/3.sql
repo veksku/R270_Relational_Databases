@@ -32,22 +32,33 @@ group by sp.id, sp.naziv;
 
 --d
 
-insert into smerovi(id, naziv, studenti, prosek)
-select sp.id, sp.naziv, count(*) br_studenata, decimal(avg(ocena+0.0), 4, 2)
-from da.studijskiprogram sp join da.dosije d
-		on d.idprograma = sp.id
-	join da.ispit i
-		on d.indeks = i.indeks and i.ocena > 5 and i.status = 'o'
-where sp.idnivoa = 2  or sp.idnivoa = 3
-group by sp.id, sp.naziv;
---ovo samo dodaje redove za master i doktorske, nmp kako da se i azuriraju vrednosti bez update
+merge into smerovi sm
+using (select sp.id id, sp.naziv naziv,
+	case
+		when id like '1%' then 'osnovne'
+		when id like '2%' then 'master'
+		when id like '3%' then 'doktorske'
+		else '-1'
+	end nivo, count(*) br_studenata, decimal(avg(ocena+0.0), 4, 2) prosek
+	from da.studijskiprogram sp join da.dosije d
+			on d.idprograma = sp.id
+		join da.ispit i
+			on d.indeks = i.indeks and i.ocena > 5 and i.status = 'o'
+	group by sp.id, sp.naziv) as tmp
+on sm.id = tmp.id
+when matched then
+	update
+	set (nivo, prosek) = (tmp.nivo, tmp.prosek)
+when not matched then
+	insert
+	values(tmp.id, tmp.naziv, tmp.nivo, tmp.br_studenata, tmp.prosek);
 
 --e
 
 delete from smerovi
 where studenti < 100 and prosek > 9.0;
 
---pomocne f-je
+--pomocni upiti
 
 select *
 from smerovi;
