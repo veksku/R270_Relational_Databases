@@ -15,9 +15,9 @@ create function to_cm(broj integer, jmere varchar(1))
 returns integer
 return
 	case
-		when jmere = 'd' or jmere = 'D' then broj*10
-		when jmere = 'm' or jmere = 'M' then broj*100
-		when jmere = 'k' or jmere = 'K' then broj*1000
+		when lower(jmere) = 'd' then broj*10
+		when lower(jmere) = 'm' then broj*100
+		when lower(jmere) = 'k' then broj*1000
 		else -1
 	end;
 	
@@ -58,7 +58,7 @@ when not matched then
 delete from smerovi
 where studenti < 100 and prosek > 9.0;
 
---pomocni upiti
+--pomocne f-je
 
 select *
 from smerovi;
