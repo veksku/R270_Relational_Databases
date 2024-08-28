@@ -20,8 +20,8 @@ return
 
 --#SET TERMINATOR @
 create trigger azuriranje_unosa
-before insert on stats
-referencing new as n
+before insert on stats --before/after insert/update/delete
+referencing new as n --referencing new/old as n/o
 for each row
 begin atomic
 	set n.udeo_studenata = izracunaj_udeo(n.mesto);
