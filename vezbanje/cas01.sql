@@ -22,7 +22,7 @@ where oznakaroka = 'jan1' and poeni = 100;
 
 --5. Izdvojiti indekse studenata koji su na nekom ispitu dobili između 65 i 87 poena.
 
-select indeks
+select distinct indeks
 from da.ispit
 where poeni between 65 and 87;
 
