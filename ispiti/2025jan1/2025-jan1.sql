@@ -5,49 +5,49 @@
 --  ни jедан испит у петак − у том случаjу уместо оцене исписати поруку Ниjе полагао/ла ни jедан испит
 --  петком. Резултат уредити у растући редослед према броjу индекса.
 
--- select d.indeks, d.ime, d.prezime, p.naziv, i.oznakaroka,
---         case when ocena is null then 'Nije polagao/la petkom.'
---            else char(ocena)
---         end "Ocena/Poruka"
--- from da.dosije d left join da.ispit i
---         on d.indeks = i.indeks and dayname(i.DATPOLAGANJA) = 'Friday' and status = 'o'
---     left join da.predmet p
---         on p.id = i.IDPREDMETA
--- where d.IDSTATUSA = 1 and d.IDPROGRAMA in (101, 201, 301)
---     and (d.ime like '% %' or d.PREZIME like '% %')
--- order by d.INDEKS asc;
+select d.indeks, d.ime, d.prezime, p.naziv, i.oznakaroka,
+        case when ocena is null then 'Nije polagao/la petkom.'
+           else char(ocena)
+        end "Ocena/Poruka"
+from da.dosije d left join da.ispit i
+        on d.indeks = i.indeks and dayname(i.DATPOLAGANJA) = 'Friday' and status = 'o'
+    left join da.predmet p
+        on p.id = i.IDPREDMETA
+where d.IDSTATUSA = 1 and d.IDPROGRAMA in (101, 201, 301)
+    and (d.ime like '% %' or d.PREZIME like '% %')
+order by d.INDEKS asc;
 
 --  2. (12п) Написати SQL упит коjим се издваjаjу студенти треће године основних академских студиjа коjи
 --  имаjу положено више од 90 ЕСПБ поена и jедини су на тоj години студиjа из свог места. Издвоjити
 --  следеће податке: индекс, име, презиме, место рођења у облику <прво слово, последње слово> (нпр. за
 --  Ужице- УЕ), назив студиjског програма и броj положених ЕСПБ.
 
--- with godine_studija(indeks,godina) as (
---     select INDEKS, count(INDEKS)
---     from da.UPISGODINE
---     group by INDEKS
--- ),
--- polozeno_espb(indeks, polozeno) as(
---     select i.indeks, sum(espb)
---     from da.ispit i join da.predmet p
---         on i.idpredmeta = p.id
---     where i.ocena > 5 and i.status='o'
---     group by i.indeks
--- )
--- select d.indeks, d.ime, d.prezime, substr(d.mestorodjenja,1,1)||substr(d.MESTORODJENJA,length(d.MESTORODJENJA),1) "Mesto rodjenja", sp.NAZIV, pe.polozeno
--- from da.dosije d join godine_studija gs
---         on d.INDEKS = gs.indeks
---     join polozeno_espb pe
---         on d.INDEKS = pe.indeks
---     join da.STUDIJSKIPROGRAM sp
---         on d.IDPROGRAMA = sp.id
--- where pe.polozeno > 90 and gs.godina = 3
--- and not exists(
---     select *
---     from da.dosije d1 join godine_studija gs1
---         on d1.indeks = gs1.indeks
---     where d1.MESTORODJENJA = d.MESTORODJENJA and gs1.godina = gs.godina and d1.INDEKS <> d.indeks
--- );
+with godine_studija(indeks,godina) as (
+    select INDEKS, count(INDEKS)
+    from da.UPISGODINE
+    group by INDEKS
+),
+polozeno_espb(indeks, polozeno) as(
+    select i.indeks, sum(espb)
+    from da.ispit i join da.predmet p
+        on i.idpredmeta = p.id
+    where i.ocena > 5 and i.status='o'
+    group by i.indeks
+)
+select d.indeks, d.ime, d.prezime, substr(d.mestorodjenja,1,1)||substr(d.MESTORODJENJA,length(d.MESTORODJENJA),1) "Mesto rodjenja", sp.NAZIV, pe.polozeno
+from da.dosije d join godine_studija gs
+        on d.INDEKS = gs.indeks
+    join polozeno_espb pe
+        on d.INDEKS = pe.indeks
+    join da.STUDIJSKIPROGRAM sp
+        on d.IDPROGRAMA = sp.id
+where pe.polozeno > 90 and gs.godina = 3
+and not exists(
+    select *
+    from da.dosije d1 join godine_studija gs1
+        on d1.indeks = gs1.indeks
+    where d1.MESTORODJENJA = d.MESTORODJENJA and gs1.godina = gs.godina and d1.INDEKS <> d.indeks
+);
 
 --  3. (20п)
 --  (a) Написати SQL наредбу коjом се прави табела Studentska_organizacija коjа има наредне колоне:
@@ -82,13 +82,13 @@ create table Studentska_organizacija (
 --  • Уколико jе студент члан организациjе, враћа поруку: Student jeste clan organizacije.
 --  • Уколико студент ниjе члан организациjе, враћа поруку: Student nije clan organizacije.
 
--- create function clan_organizacije(indeks_in integer)
--- returns varchar(200)
--- return case
---     when indeks_in in (select id from Studentska_organizacija)
---         then 'Student jeste clan organizacije.'
---         else 'Student nije clan organizacije'
---     end;
+create function clan_organizacije(indeks_in integer)
+returns varchar(200)
+return case
+    when indeks_in in (select id from Studentska_organizacija)
+        then 'Student jeste clan organizacije.'
+        else 'Student nije clan organizacije'
+    end;
 
 --  (c) Написати SQL наредбу коjом се уносе подаци о новим члановима у табелу Studentska_organizacija,
 --  користећи податке из табеле dosije. Унети податке о студентима чиjе jе место рођења Нови Сад.
